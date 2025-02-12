@@ -1,0 +1,72 @@
+plugins {
+    id "java-library"
+    id "com.github.johnrengelman.shadow" version "7.1.0"
+    id "maven-publish"
+}
+
+group = 'net.milkbowl.vault'
+version = '1.7.3'
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+    disableAutoTargetJvm()
+}
+
+compileJava {
+    options.compilerArgs += ['-parameters']
+    options.fork = true
+    options.encoding = 'UTF-8'
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven {
+        url 'https://nexus.hc.to/content/repositories/pub_releases/'
+    }
+    maven {
+        url 'https://hub.spigotmc.org/nexus/content/groups/public/'
+    }
+    maven {
+        url 'https://repo.codemc.org/repository/maven-public'
+    }
+}
+
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT'
+    implementation 'org.bstats:bstats-bukkit:3.0.0'
+
+    // System-scoped dependencies (you will need to manually place the jars in lib/)
+    implementation files('lib/VaultAPI-1.7.jar')
+    compileOnly files('lib/DroxPerms.jar')
+    compileOnly files('lib/Privileges.jar')
+    compileOnly files('lib/bpermissions.jar')
+    compileOnly files('lib/Xperms.jar')
+    compileOnly files('lib/EssentialsGroupManager.jar')
+    compileOnly files('lib/iChat.jar')
+    compileOnly files('lib/mChat.jar')
+    compileOnly files('lib/mChatSuite.jar')
+    compileOnly files('lib/Permissions.jar')
+    compileOnly files('lib/PermissionsBukkit.jar')
+    compileOnly files('lib/PermissionsEx.jar')
+    compileOnly files('lib/bpermissions25.jar')
+    compileOnly files('lib/Starburst.jar')
+    compileOnly files('lib/SimplyPerms.jar')
+    compileOnly files('lib/CommandsEX.jar')
+    compileOnly files('lib/TotalPermissions.jar')
+    compileOnly files('lib/rscPermissions.jar')
+    compileOnly files('lib/KPerms.jar')
+    compileOnly files('lib/overpermissions-2.0.0.jar')
+}
+
+
+shadowJar {
+    archiveClassifier.set(null)
+
+    relocate('org.bstats', 'net.milkbowl.vault.metrics')
+}
+
+build.dependsOn shadowJar
